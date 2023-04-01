@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import FormComponent from './form/Form';
 import * as Yup from 'yup';
-import { nanoid } from 'nanoid';
 import FriendList from './list/List';
 import SearchBar from './Finder/Finder';
 import { Container } from './form/Form.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, setContacts } from 'redux/phoneSlice';
+import { LOCAL_ID } from 'refs/localStorage';
 
 const App = () => {
-  const LOCAL_ID = 'contacts';
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.phone.contacts);
 
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
   const initialValues = {
     name: '',
     phoneNumber: '',
@@ -28,41 +29,10 @@ const App = () => {
       alert(`${values.name} is already in your contacts`);
       resetForm();
     } else {
-      values.id = nanoid();
-      setContacts([...contacts, values]);
+      dispatch(addContact(values));
       resetForm();
     }
   };
-
-  const deleteContactById = event => {
-    setContacts(
-      contacts.filter(contact => contact.id !== event.currentTarget.id)
-    );
-  };
-
-  const handleInputChange = event => {
-    setFilter(event.target.value);
-  };
-
-  const handleFilter = () => {
-    if (filter.trim() === '') {
-      return contacts;
-    }
-    const normFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normFilter)
-    );
-  };
-
-  useEffect(() => {
-    localStorage.getItem(LOCAL_ID) &&
-      setContacts(JSON.parse(localStorage.getItem(LOCAL_ID)));
-    console.log(
-      'localStorage.getItem(LOCAL_ID):',
-      JSON.parse(localStorage.getItem(LOCAL_ID))
-    );
-  }, []);
-
   useEffect(() => {
     localStorage.setItem(LOCAL_ID, JSON.stringify(contacts));
   }, [contacts]);
@@ -77,12 +47,8 @@ const App = () => {
           validationSchema={FormSchema}
         />
         <h2 style={{ marginTop: '3rem', marginBottom: '0px' }}>Contacts</h2>
-        <SearchBar value={filter} onChange={handleInputChange} />
-        <FriendList
-          friends={handleFilter()}
-          deleteContactById={deleteContactById}
-          storageId={LOCAL_ID}
-        />
+        <SearchBar />
+        <FriendList />
       </Container>
     </>
   );
