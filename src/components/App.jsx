@@ -5,7 +5,7 @@ import FriendList from './list/List';
 import SearchBar from './Finder/Finder';
 import { Container } from './form/Form.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, setContacts } from 'redux/phoneSlice';
+import { addContact } from 'redux/phoneSlice';
 import { LOCAL_ID } from 'refs/localStorage';
 
 const App = () => {
