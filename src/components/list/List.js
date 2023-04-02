@@ -1,21 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FriendListContainer, Span } from './List.styled';
 import FriendItem from 'components/ListItem/ListItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeContact } from 'redux/phoneSlice';
-import { LOCAL_ID } from 'refs/localStorage';
 
-function FriendList(props) {
+function FriendList() {
   const dispatch = useDispatch();
   const friends = useSelector(state => state.phone.contacts);
   const filter = useSelector(state => state.phone.filter);
-
-  useEffect(() => {
-    const storedFriends = JSON.parse(localStorage.getItem(LOCAL_ID)) || [];
-    if (JSON.stringify(storedFriends) !== JSON.stringify(friends)) {
-      localStorage.setItem(LOCAL_ID, JSON.stringify(friends));
-    }
-  }, [friends]);
 
   return (
     <>

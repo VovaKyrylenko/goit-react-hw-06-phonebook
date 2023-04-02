@@ -1,13 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
-import { LOCAL_ID } from 'refs/localStorage';
 
 const phoneSlice = createSlice({
   name: 'phone',
   initialState: {
-    contacts: localStorage.getItem(LOCAL_ID)
-      ? JSON.parse(localStorage.getItem(LOCAL_ID))
-      : [],
+    contacts: [],
     filter: '',
   },
   reducers: {

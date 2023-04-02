@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import FormComponent from './form/Form';
 import * as Yup from 'yup';
 import FriendList from './list/List';
@@ -6,7 +6,6 @@ import SearchBar from './Finder/Finder';
 import { Container } from './form/Form.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/phoneSlice';
-import { LOCAL_ID } from 'refs/localStorage';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -33,9 +32,6 @@ const App = () => {
       resetForm();
     }
   };
-  useEffect(() => {
-    localStorage.setItem(LOCAL_ID, JSON.stringify(contacts));
-  }, [contacts]);
 
   return (
     <>
