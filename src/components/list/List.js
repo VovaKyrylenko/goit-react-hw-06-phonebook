@@ -1,35 +1,24 @@
 import React from 'react';
 import { FriendListContainer, Span } from './List.styled';
-import FriendItem from 'components/ListItem/ListItem';
-import { useDispatch, useSelector } from 'react-redux';
-import { removeContact } from 'redux/phoneSlice';
+import FriendItem from 'components/listItem/ListItem';
 
-function FriendList() {
-  const dispatch = useDispatch();
-  const friends = useSelector(state => state.phone.contacts);
-  const filter = useSelector(state => state.phone.filter);
+function FriendList({ contacts, filter }) {
+  const filteredContacts = filter
+    ? contacts.filter(contact =>
+        contact.name.toLowerCase().includes(filter.toLowerCase().trim())
+      )
+    : contacts;
 
+  const friendItems = filteredContacts.map(friend => (
+    <FriendItem friend={friend} key={friend.id} />
+  ));
   return (
     <>
       <Span>Your contacts:</Span>
-      {friends.length === 0 ? (
+      {contacts.length === 0 ? (
         <p>Nothing here</p>
       ) : (
-        <FriendListContainer>
-          {friends
-            .filter(contact =>
-              contact.name.toLowerCase().includes(filter.toLowerCase().trim())
-            )
-            .map(friend => (
-              <FriendItem
-                friend={friend}
-                deleteContactById={event => {
-                  dispatch(removeContact(event.currentTarget.id));
-                }}
-                key={friend.id}
-              />
-            ))}
-        </FriendListContainer>
+        <FriendListContainer>{friendItems}</FriendListContainer>
       )}
     </>
   );

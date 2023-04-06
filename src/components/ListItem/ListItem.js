@@ -1,5 +1,4 @@
 import { FiTrash2 } from 'react-icons/fi';
-import PropTypes from 'prop-types';
 import {
   FriendListItem,
   Name,
@@ -7,25 +6,22 @@ import {
   DeleteButton,
 } from 'components/list/List.styled';
 import React from 'react';
-function FriendItem({ friend, deleteContactById }) {
+import { useDeleteContactMutation } from 'redux/mockAPI';
+function FriendItem({ friend }) {
+  const [deleteContact] = useDeleteContactMutation();
   return (
     <FriendListItem>
       <Name>{friend.name}</Name>
       <PhoneNumber>{friend.phoneNumber}</PhoneNumber>
-      <DeleteButton onClick={deleteContactById} id={friend.id}>
+      <DeleteButton
+        onClick={async event => {
+          await deleteContact(event.currentTarget.id);
+        }}
+        id={friend.id}
+      >
         <FiTrash2 />
       </DeleteButton>
     </FriendListItem>
   );
 }
-
-FriendItem.propTypes = {
-  friend: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    phoneNumber: PropTypes.string.isRequired,
-  }).isRequired,
-  deleteContactById: PropTypes.func.isRequired,
-};
-
 export default FriendItem;
